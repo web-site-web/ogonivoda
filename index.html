@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Огонь и Вода — украшения из вулканической лавы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0a0c;
+    --bg-soft:#121216;
+    --card:#17171c;
+    --fg:#f2f2f5;
+    --fg-dim:#82828e;
+    --line:rgba(255,255,255,.1);
+    --accent-1:#5b5bff;
+    --accent-2:#a855f7;
+  }
+  :root[data-theme="light"]{
+    --bg:#efeeea;
+    --bg-soft:#ffffff;
+    --card:#e2e1dc;
+    --fg:#0d0d10;
+    --fg-dim:#6f6f78;
+    --line:rgba(0,0,0,.1);
+    --accent-1:#5b5bff;
+    --accent-2:#a855f7;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    font-weight:400;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    padding-bottom:46px;
+    transition:background-color .5s var(--ease), color .5s var(--ease);
+  }
+
+  /* ---------- INTRO VIDEO ---------- */
+  .intro-video{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:#000;
+    display:grid;
+    place-items:center;
+    transition:opacity .9s var(--ease);
+  }
+  .intro-video.intro-done{
+    opacity:0;
+    pointer-events:none;
+  }
+  .intro-video video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    background:#000;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:grid;
+    place-items:center;
+    padding:0 4vw;
+  }
+  .hero-inner{
+    text-align:center;
+  }
+  .hero-inner h1{
+    font-family:'Unbounded',sans-serif;
+    font-weight:800;
+    font-size:clamp(1.45rem, 6.4vw, 6rem);
+    line-height:1;
+    letter-spacing:-.035em;
+    color:var(--fg);
+    white-space:nowrap;
+  }
+
+  /* ---------- INTRO ---------- */
+  .intro{
+    max-width:700px;
+    margin:0 auto;
+    padding:10vh 5vw 12vh;
+    text-align:center;
+  }
+  .intro-lead{
+    font-size:clamp(.98rem,1.6vw,1.12rem);
+    line-height:1.72;
+    color:var(--fg);
+    opacity:.88;
+    margin-bottom:2.9rem;
+  }
+
+  .price-list{
+    list-style:none;
+    max-width:430px;
+    margin:0 auto;
+  }
+  .price-list li{
+    display:flex;
+    align-items:center;
+    gap:.8rem;
+    padding:.85rem 0;
+    font-size:1rem;
+    border-bottom:1px solid var(--line);
+  }
+  .price-list li:last-child{border-bottom:none;}
+  .price-list .name{color:var(--fg);}
+  .price-list .rule{
+    flex:1;
+    height:1px;
+    background-image:linear-gradient(90deg, var(--line) 0 3px, transparent 3px 8px);
+    background-size:8px 1px;
+    opacity:.9;
+  }
+  .price-list .val{
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+    margin-top:3rem;
+    padding:1rem 2.8rem;
+    border-radius:999px;
+    background:linear-gradient(100deg, var(--accent-1), var(--accent-2));
+    color:#fff;
+    font-family:'Manrope',sans-serif;
+    font-weight:600;
+    font-size:1rem;
+    text-decoration:none;
+    letter-spacing:.01em;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    box-shadow:0 10px 34px -10px rgba(120,80,255,.85);
+  }
+  .cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 44px -10px rgba(120,80,255,1);
+  }
+  .cta:active{transform:translateY(0);}
+
+  .cta-note{
+    display:block;
+    margin-top:.85rem;
+    font-size:.72rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+  }
+
+  /* ---------- BANNERS (видео 9:16) ---------- */
+  .banners{
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 4vw 12vh;
+  }
+  .banners-track{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:16px;
+    max-width:960px;
+    margin:0 auto;
+  }
+  .banner{
+    position:relative;
+    aspect-ratio:9/16;
+    border-radius:20px;
+    overflow:hidden;
+    background:var(--card);
+    animation:fadeUp .6s var(--ease) both;
+  }
+  .banner video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  /* ---------- CATALOG ---------- */
+  .catalog{
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 4vw 16vh;
+  }
+  .catalog-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:1rem;
+    margin-bottom:2.5rem;
+    padding-bottom:1.2rem;
+    border-bottom:1px solid var(--line);
+  }
+  .catalog-head h2{
+    font-family:'Unbounded',sans-serif;
+    font-weight:700;
+    font-size:clamp(1.3rem,3vw,2rem);
+    letter-spacing:-.02em;
+  }
+  .catalog-count{
+    font-size:.8rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+    white-space:nowrap;
+  }
+
+  .catalog-layout{
+    display:grid;
+    grid-template-columns:210px 1fr;
+    gap:3rem;
+    align-items:start;
+  }
+
+  .filters{
+    position:sticky;
+    top:2rem;
+    display:flex;
+    flex-direction:column;
+    gap:.25rem;
+  }
+  .filters button{
+    all:unset;
+    cursor:pointer;
+    padding:.72rem 1.1rem;
+    border-radius:12px;
+    font-family:'Manrope',sans-serif;
+    font-size:.95rem;
+    color:var(--fg-dim);
+    transition:background-color .25s var(--ease), color .25s var(--ease);
+    white-space:nowrap;
+  }
+  .filters button:hover{color:var(--fg);}
+  .filters button.active{
+    color:var(--fg);
+    background:var(--card);
+    font-weight:600;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(172px, 1fr));
+    gap:14px;
+  }
+
+  .card{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:18px;
+    overflow:hidden;
+    background:var(--card);
+    animation:fadeUp .5s var(--ease) both;
+  }
+  .card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    opacity:0;
+    transform:scale(1.02);
+    transition:opacity .55s var(--ease), transform .7s var(--ease);
+  }
+  .card img.loaded{opacity:1;transform:scale(1);}
+  .card:hover img.loaded{transform:scale(1.06);}
+
+  .empty-state{
+    grid-column:1/-1;
+    padding:3.2rem 1.6rem;
+    text-align:center;
+    border:1px dashed var(--line);
+    border-radius:18px;
+    color:var(--fg-dim);
+    font-size:.98rem;
+    line-height:1.7;
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* ---------- THEME TOGGLE ---------- */
+  .theme-btn{
+    position:fixed;
+    top:1.4rem;
+    right:1.4rem;
+    z-index:60;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg-soft);
+    color:var(--fg);
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    transition:transform .35s var(--ease), background-color .4s var(--ease);
+  }
+  .theme-btn:hover{transform:rotate(25deg);}
+  :root[data-theme="dark"] .icon-sun{display:none;}
+  :root[data-theme="light"] .icon-moon{display:none;}
+
+  /* ---------- DEMO BANNER ---------- */
+  .demo-banner{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:70;
+    padding:.7rem 1rem;
+    text-align:center;
+    font-size:.72rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+    background:color-mix(in srgb, var(--bg-soft) 82%, transparent);
+    border-top:1px solid var(--line);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:820px){
+    .catalog-layout{
+      grid-template-columns:1fr;
+      gap:1.6rem;
+    }
+    .filters{
+      position:static;
+      flex-direction:row;
+      overflow-x:auto;
+      gap:.4rem;
+      padding-bottom:.5rem;
+      scrollbar-width:none;
+    }
+    .filters::-webkit-scrollbar{display:none;}
+    .filters button{
+      padding:.6rem .95rem;
+      border:1px solid var(--line);
+      font-size:.88rem;
+    }
+    .grid{
+      grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+      gap:10px;
+    }
+    .card{border-radius:14px;}
+
+    .banners{
+      padding-left:0;
+      padding-right:0;
+      padding-bottom:9vh;
+    }
+    .banners-track{
+      display:flex;
+      gap:12px;
+      max-width:none;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      padding:0 4vw;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    .banners-track::-webkit-scrollbar{display:none;}
+    .banner{
+      flex:0 0 80%;
+      scroll-snap-align:center;
+      border-radius:16px;
+    }
+  }
+
+  @media (max-width:480px){
+    .grid{grid-template-columns:repeat(2, 1fr);}
+    .theme-btn{top:1rem;right:1rem;width:42px;height:42px;}
+    .catalog-head{flex-direction:column;gap:.4rem;}
+    .banner{flex:0 0 84%;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Интро-видео: на весь экран, после проигрывания сайт открывается в тёмной теме -->
+  <div class="intro-video" id="introVideo">
+    <video id="introPlayer" src="images/logo_burn_center.mp4" muted autoplay playsinline preload="auto"></video>
+  </div>
+
+  <button class="theme-btn" id="themeToggle" aria-label="Сменить тему">
+    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </svg>
+  </button>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>Огонь и Вода</h1>
+    </div>
+  </header>
+
+  <section class="intro">
+    <p class="intro-lead">
+      Эксклюзивная коллекция украшений, вдохновлённая природной красотой Камчатки.
+      Каждое изделие создано из настоящей вулканической лавы — материала с уникальной
+      энергетикой и неповторимым характером.
+    </p>
+
+    <ul class="price-list">
+      <li>
+        <span class="name">Серьги</span>
+        <span class="rule"></span>
+        <span class="val">900 ₽</span>
+      </li>
+      <li>
+        <span class="name">Брелоки</span>
+        <span class="rule"></span>
+        <span class="val">1000 ₽</span>
+      </li>
+      <li>
+        <span class="name">Браслеты</span>
+        <span class="rule"></span>
+        <span class="val">1500 ₽</span>
+      </li>
+      <li>
+        <span class="name">Чокеры</span>
+        <span class="rule"></span>
+        <span class="val">2000 ₽</span>
+      </li>
+      <li>
+        <span class="name">Броши</span>
+        <span class="rule"></span>
+        <span class="val">2000 ₽</span>
+      </li>
+      <li>
+        <span class="name">Чётки</span>
+        <span class="rule"></span>
+        <span class="val">2000 ₽</span>
+      </li>
+    </ul>
+
+    <a class="cta" href="https://max.ru/" target="_blank" rel="noopener">Написать в МАХ</a>
+    <small class="cta-note">для заказа</small>
+  </section>
+
+  <section class="banners" aria-label="Видео">
+    <div class="banners-track" id="bannersTrack"></div>
+  </section>
+
+  <section class="catalog">
+    <div class="catalog-head">
+      <h2>Каталог</h2>
+      <span class="catalog-count" id="catalogCount"></span>
+    </div>
+
+    <div class="catalog-layout">
+      <aside class="filters" id="filters">
+        <button data-cat="nabors" class="active">Наборы</button>
+        <button data-cat="braslets">Браслеты</button>
+        <button data-cat="chokers">Чокеры</button>
+        <button data-cat="broshs">Броши</button>
+        <button data-cat="breloks">Брелоки</button>
+        <button data-cat="chotkis">Чётки</button>
+        <button data-cat="sergis">Серьги</button>
+      </aside>
+
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <div class="demo-banner">демо-сайт, не для продажи</div>
+
+  <script>
+    /* ============================================================
+       ИНТРО-ВИДЕО
+       ============================================================ */
+
+    const root = document.documentElement;
+    const introWrap   = document.getElementById('introVideo');
+    const introPlayer = document.getElementById('introPlayer');
+
+    const INTRO_CANDIDATES = [
+      'images/logo_burn_center.mp4',
+      'images/logo_burn_center.MP4',
+      'images/logo_burn_center.webm',
+      'images/Logo_burn_center.mp4'
+    ];
+    let introTry = 0;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function finishIntro() {
+      if (!introWrap.parentNode) return;
+
+      /* После интро сайт открывается в тёмной теме */
+      root.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+
+      introWrap.classList.add('intro-done');
+      setTimeout(() => introWrap.remove(), 950);
+    }
+
+    introPlayer.addEventListener('ended', finishIntro);
+    introPlayer.addEventListener('error', finishIntro);
+
+    const tryPlay = introPlayer.play();
+    if (tryPlay && tryPlay.catch) {
+      tryPlay.catch(() => setTimeout(finishIntro, 1200));
+    }
+
+    /* Страховка: не держим чёрный экран дольше 10 секунд */
+    setTimeout(finishIntro, 10000);
+
+    if (prefersReduced) finishIntro();
+
+    /* ============================================================
+       ТЕМА
+       ============================================================ */
+
+    const themeToggle = document.getElementById('themeToggle');
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      root.setAttribute('data-theme', savedTheme);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    /* ============================================================
+       ВИДЕО-ХЕЛПЕР (для баннеров)
+       ============================================================ */
+
+    function buildVideo(candidates, onFail) {
+      const v = document.createElement('video');
+      v.muted = true;
+      v.loop = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.preload = 'metadata';
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('disablepictureinpicture', '');
+
+      let i = 0;
+      v.addEventListener('error', () => {
+        i++;
+        if (i < candidates.length) {
+          v.src = candidates[i];
+        } else if (onFail) {
+          onFail();
+        }
+      });
+
+      v.addEventListener('loadeddata', () => {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      });
+
+      v.src = candidates[0];
+      return v;
+    }
+
+    /* ============================================================
+       БАННЕРЫ — 3 видео 9:16
+       ============================================================ */
+
+    const BANNER_FILES = [
+      ['images/banners/banner1.mp4', 'images/banners/1.mp4'],
+      ['images/banners/banner2.mp4', 'images/banners/2.mp4'],
+      ['images/banners/banner3.mp4', 'images/banners/3.mp4']
+    ];
+
+    const bannersTrack = document.getElementById('bannersTrack');
+
+    BANNER_FILES.forEach((candidates, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'banner';
+      wrap.style.animationDelay = (idx * 90) + 'ms';
+
+      const video = buildVideo(candidates, () => wrap.remove());
+      wrap.appendChild(video);
+      bannersTrack.appendChild(wrap);
+    });
+
+    /* ============================================================
+       КАТАЛОГ
+       ============================================================ */
+
+    const CATALOG = {
+      nabors: [
+        { folder: 'nabors', prefixes: ['nabor', 'Nabor', ''], from: 1, to: 46 }
+      ],
+      braslets: [
+        { folder: 'braslets',  prefixes: ['braslet', 'Braslet', ''], from: 1, to: 96 },
+        { folder: 'braslets2',  prefixes: ['braslet', 'Braslet', ''], from: 97, to: 198 },
+        { folder: 'braslets3',  prefixes: ['braslet', 'Braslet', ''], from: 199, to: 252 }
+      ],
+      chokers: [
+        { folder: 'chokers',  prefixes: ['choker', 'Choker', ''], from: 1, to: 77 }
+      ],
+      broshs: [
+        { folder: 'broshs', prefixes: ['brosh', 'Brosh', ''], from: 1, to: 4 }
+      ],
+      breloks: [
+        { folder: 'breloks',  prefixes: ['brelok', 'Brelok', ''], from: 1, to: 20 }
+      ],
+      chotkis: [
+        { folder: 'chotkis', prefixes: ['chotka', 'chotki', 'Chotka', 'Chotki', ''], from: 1, to: 4 }
+      ],
+      sergis: [
+        { folder: 'sergis',  prefixes: ['sergi', 'Sergi', ''], from: 1, to: 26 }
+      ]
+    };
+
+    const grid = document.getElementById('grid');
+    const countLabel = document.getElementById('catalogCount');
+    const filters = document.getElementById('filters');
+
+    const IMG_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG', 'WEBP'];
+
+    function imgCandidates(folder, prefixes, num) {
+      const list = [];
+      for (const p of prefixes) {
+        for (const e of IMG_EXTS) {
+          list.push(`images/${folder}/${p}${num}.${e}`);
+        }
+      }
+      return list;
+    }
+
+    function createImageCard(candidates, delay) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.animationDelay = delay + 'ms';
+
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.alt = '';
+
+      let i = 0;
+      img.addEventListener('load', () => img.classList.add('loaded'));
+      img.addEventListener('error', () => {
+        i++;
+        if (i < candidates.length) {
+          img.src = candidates[i];
+        } else {
+          card.remove();
+        }
+      });
+
+      img.src = candidates[0];
+      card.appendChild(img);
+      return card;
+    }
+
+    function renderCategory(key) {
+      const blocks = CATALOG[key];
+      if (!blocks) return;
+
+      grid.innerHTML = '';
+
+      /* Пустой раздел */
+      if (blocks.length === 0) {
+        const box = document.createElement('div');
+        box.className = 'empty-state';
+        box.textContent = 'В этом разделе пока нет фотографий.';
+        grid.appendChild(box);
+        countLabel.textContent = '0 шт.';
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      let shown = 0;
+
+      blocks.forEach(block => {
+        for (let n = block.from; n <= block.to; n++) {
+          const card = createImageCard(
+            imgCandidates(block.folder, block.prefixes, n),
+            Math.min(shown * 14, 420)
+          );
+          fragment.appendChild(card);
+          shown++;
+        }
+      });
+
+      grid.appendChild(fragment);
+      countLabel.textContent = shown + ' шт.';
+    }
+
+    filters.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+
+      filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCategory(btn.dataset.cat);
+    });
+
+    renderCategory('nabors');
+  </script>
+</body>
+</html>
