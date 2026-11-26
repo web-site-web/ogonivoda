@@ -650,7 +650,7 @@
       const list = [];
       for (const p of prefixes) {
         for (const e of IMG_EXTS) {
-          list.push(`images/${folder}/${p}${num}.${e}`);
+          list.push(`${folder}/${p}${num}.${e}`);
         }
       }
       return list;
