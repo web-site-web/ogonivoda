@@ -48,36 +48,36 @@
     transition:background-color .5s var(--ease), color .5s var(--ease);
   }
 
-  /* ---------- INTRO VIDEO ---------- */
-  .intro-video{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    background:#000;
-    display:grid;
-    place-items:center;
-    transition:opacity .9s var(--ease);
-  }
-  .intro-video.intro-done{
+  /* ---------- REVEAL ON SCROLL ---------- */
+  .reveal{
     opacity:0;
-    pointer-events:none;
+    transform:translateY(24px);
+    transition:opacity .8s var(--ease), transform .8s var(--ease);
+    will-change:opacity, transform;
   }
-  .intro-video video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    background:#000;
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
   }
+  .reveal-delay-1{transition-delay:.08s;}
+  .reveal-delay-2{transition-delay:.16s;}
+  .reveal-delay-3{transition-delay:.24s;}
+  .reveal-delay-4{transition-delay:.32s;}
+  .reveal-delay-5{transition-delay:.40s;}
+  .reveal-delay-6{transition-delay:.48s;}
 
-  /* ---------- HERO ---------- */
+  /* ---------- HERO С ЛОГОТИПОМ ---------- */
   .hero{
+    position:relative;
     min-height:100svh;
     display:grid;
     place-items:center;
     padding:0 4vw;
+    overflow:hidden;
   }
   .hero-inner{
+    position:relative;
+    z-index:2;
     text-align:center;
   }
   .hero-inner h1{
@@ -88,6 +88,33 @@
     letter-spacing:-.035em;
     color:var(--fg);
     white-space:nowrap;
+    position:relative;
+    z-index:2;
+  }
+
+  /* Логотип на фоне (за текстом) */
+  .hero-logo{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:clamp(200px, 50vw, 600px);
+    height:auto;
+    z-index:1;
+    pointer-events:none;
+    opacity:0.35;
+    animation: breathe 5s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: translate(-50%, -50%) translateY(0);
+      opacity: 0.25;
+    }
+    50% {
+      transform: translate(-50%, -50%) translateY(-20px);
+      opacity: 0.45;
+    }
   }
 
   /* ---------- INTRO ---------- */
@@ -184,7 +211,6 @@
     border-radius:20px;
     overflow:hidden;
     background:var(--card);
-    animation:fadeUp .6s var(--ease) both;
   }
   .banner video{
     width:100%;
@@ -258,27 +284,41 @@
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(172px, 1fr));
     gap:14px;
+    grid-auto-rows: 1fr;
   }
 
   .card{
     position:relative;
-    aspect-ratio:1/1;
     border-radius:18px;
     overflow:hidden;
     background:var(--card);
     animation:fadeUp .5s var(--ease) both;
+    aspect-ratio: 1/1;
   }
+  
+  /* Исправленный баг с отображением: убрали скрытие по умолчанию */
   .card img{
     width:100%;
     height:100%;
     object-fit:cover;
     display:block;
-    opacity:0;
-    transform:scale(1.02);
     transition:opacity .55s var(--ease), transform .7s var(--ease);
   }
-  .card img.loaded{opacity:1;transform:scale(1);}
-  .card:hover img.loaded{transform:scale(1.06);}
+  
+  .card:hover img{
+    transform:scale(1.06);
+  }
+
+  .card-video{
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+  .card-video video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
 
   .empty-state{
     grid-column:1/-1;
@@ -392,19 +432,17 @@
     .theme-btn{top:1rem;right:1rem;width:42px;height:42px;}
     .catalog-head{flex-direction:column;gap:.4rem;}
     .banner{flex:0 0 84%;}
+    .hero-logo{width:clamp(180px, 60vw, 400px); opacity:0.25;}
   }
 
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+    .reveal{opacity:1 !important;transform:none !important;}
+    .hero-logo{animation:none; opacity:0.35;}
   }
 </style>
 </head>
 <body>
-
-  <!-- Интро-видео: на весь экран, после проигрывания сайт открывается в тёмной теме -->
-  <div class="intro-video" id="introVideo">
-    <video id="introPlayer" src="images/logo_burn_center.mp4" muted autoplay playsinline preload="auto"></video>
-  </div>
 
   <button class="theme-btn" id="themeToggle" aria-label="Сменить тему">
     <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -417,71 +455,61 @@
   </button>
 
   <header class="hero">
+    <!-- Логотип на фоне -->
+    <img src="images/logo_1.png" class="hero-logo" alt="">
+    
     <div class="hero-inner">
-      <h1>Огонь и Вода</h1>
+      <h1 class="reveal">Огонь и Вода</h1>
     </div>
   </header>
 
   <section class="intro">
-    <p class="intro-lead">
+    <p class="intro-lead reveal">
       Эксклюзивная коллекция украшений, вдохновлённая природной красотой Камчатки.
       Каждое изделие создано из настоящей вулканической лавы — материала с уникальной
       энергетикой и неповторимым характером.
     </p>
 
     <ul class="price-list">
-      <li>
-        <span class="name">Серьги</span>
-        <span class="rule"></span>
-        <span class="val">900 ₽</span>
+      <li class="reveal reveal-delay-1">
+        <span class="name">Серьги</span><span class="rule"></span><span class="val">900 ₽</span>
       </li>
-      <li>
-        <span class="name">Брелоки</span>
-        <span class="rule"></span>
-        <span class="val">1000 ₽</span>
+      <li class="reveal reveal-delay-2">
+        <span class="name">Брелоки</span><span class="rule"></span><span class="val">1000 ₽</span>
       </li>
-      <li>
-        <span class="name">Браслеты</span>
-        <span class="rule"></span>
-        <span class="val">1500 ₽</span>
+      <li class="reveal reveal-delay-3">
+        <span class="name">Браслеты</span><span class="rule"></span><span class="val">1500 ₽</span>
       </li>
-      <li>
-        <span class="name">Чокеры</span>
-        <span class="rule"></span>
-        <span class="val">2000 ₽</span>
+      <li class="reveal reveal-delay-4">
+        <span class="name">Чокеры</span><span class="rule"></span><span class="val">2000 ₽</span>
       </li>
-      <li>
-        <span class="name">Броши</span>
-        <span class="rule"></span>
-        <span class="val">2000 ₽</span>
+      <li class="reveal reveal-delay-5">
+        <span class="name">Броши</span><span class="rule"></span><span class="val">2000 ₽</span>
       </li>
-      <li>
-        <span class="name">Чётки</span>
-        <span class="rule"></span>
-        <span class="val">2000 ₽</span>
+      <li class="reveal reveal-delay-6">
+        <span class="name">Чётки</span><span class="rule"></span><span class="val">2000 ₽</span>
       </li>
     </ul>
 
-    <a class="cta" href="https://max.ru/" target="_blank" rel="noopener">Написать в МАХ</a>
-    <small class="cta-note">для заказа</small>
+    <a class="cta reveal reveal-delay-3" href="https://max.ru/" target="_blank" rel="noopener">Написать в МАХ</a>
+    <small class="cta-note reveal reveal-delay-4">для заказа</small>
   </section>
 
-  <section class="banners" aria-label="Видео">
+  <section class="banners reveal" aria-label="Видео">
     <div class="banners-track" id="bannersTrack"></div>
   </section>
 
   <section class="catalog">
-    <div class="catalog-head">
+    <div class="catalog-head reveal">
       <h2>Каталог</h2>
       <span class="catalog-count" id="catalogCount"></span>
     </div>
 
     <div class="catalog-layout">
-      <aside class="filters" id="filters">
+      <aside class="filters reveal" id="filters">
         <button data-cat="nabors" class="active">Наборы</button>
         <button data-cat="braslets">Браслеты</button>
         <button data-cat="chokers">Чокеры</button>
-        <button data-cat="broshs">Броши</button>
         <button data-cat="breloks">Брелоки</button>
         <button data-cat="chotkis">Чётки</button>
         <button data-cat="sergis">Серьги</button>
@@ -495,58 +523,16 @@
 
   <script>
     /* ============================================================
-       ИНТРО-ВИДЕО
+       СТАРТОВАЯ ТЕМА
        ============================================================ */
-
     const root = document.documentElement;
-    const introWrap   = document.getElementById('introVideo');
-    const introPlayer = document.getElementById('introPlayer');
-
-    const INTRO_CANDIDATES = [
-      'images/logo_burn_center.mp4',
-      'images/logo_burn_center.MP4',
-      'images/logo_burn_center.webm',
-      'images/Logo_burn_center.mp4'
-    ];
-    let introTry = 0;
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function finishIntro() {
-      if (!introWrap.parentNode) return;
-
-      /* После интро сайт открывается в тёмной теме */
-      root.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-
-      introWrap.classList.add('intro-done');
-      setTimeout(() => introWrap.remove(), 950);
-    }
-
-    introPlayer.addEventListener('ended', finishIntro);
-    introPlayer.addEventListener('error', finishIntro);
-
-    const tryPlay = introPlayer.play();
-    if (tryPlay && tryPlay.catch) {
-      tryPlay.catch(() => setTimeout(finishIntro, 1200));
-    }
-
-    /* Страховка: не держим чёрный экран дольше 10 секунд */
-    setTimeout(finishIntro, 10000);
-
-    if (prefersReduced) finishIntro();
+    root.setAttribute('data-theme', 'dark');
+    localStorage.removeItem('theme');
 
     /* ============================================================
        ТЕМА
        ============================================================ */
-
     const themeToggle = document.getElementById('themeToggle');
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light' || savedTheme === 'dark') {
-      root.setAttribute('data-theme', savedTheme);
-    }
-
     themeToggle.addEventListener('click', () => {
       const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
@@ -554,9 +540,8 @@
     });
 
     /* ============================================================
-       ВИДЕО-ХЕЛПЕР (для баннеров)
+       ВИДЕО-ХЕЛПЕР
        ============================================================ */
-
     function buildVideo(candidates, onFail) {
       const v = document.createElement('video');
       v.muted = true;
@@ -589,9 +574,8 @@
     }
 
     /* ============================================================
-       БАННЕРЫ — 3 видео 9:16
+       БАННЕРЫ
        ============================================================ */
-
     const BANNER_FILES = [
       ['images/banners/banner1.mp4', 'images/banners/1.mp4'],
       ['images/banners/banner2.mp4', 'images/banners/2.mp4'],
@@ -599,12 +583,9 @@
     ];
 
     const bannersTrack = document.getElementById('bannersTrack');
-
-    BANNER_FILES.forEach((candidates, idx) => {
+    BANNER_FILES.forEach((candidates) => {
       const wrap = document.createElement('div');
       wrap.className = 'banner';
-      wrap.style.animationDelay = (idx * 90) + 'ms';
-
       const video = buildVideo(candidates, () => wrap.remove());
       wrap.appendChild(video);
       bannersTrack.appendChild(wrap);
@@ -613,30 +594,52 @@
     /* ============================================================
        КАТАЛОГ
        ============================================================ */
-
     const CATALOG = {
       nabors: [
-        { folder: 'nabors', prefixes: ['nabor', 'Nabor', ''], from: 1, to: 46 }
+        { folder: 'nabors', from: 1, to: 46 }
       ],
       braslets: [
-        { folder: 'braslets',  prefixes: ['braslet', 'Braslet', ''], from: 1, to: 96 },
-        { folder: 'braslets2',  prefixes: ['braslet', 'Braslet', ''], from: 97, to: 198 },
-        { folder: 'braslets3',  prefixes: ['braslet', 'Braslet', ''], from: 199, to: 252 }
+        { folder: 'braslets',  from: 1,  to: 96 },
+        { folder: 'braslets2', from: 97, to: 196 },
+        { folder: 'braslets3', from: 199, to: 252 }
       ],
       chokers: [
-        { folder: 'chokers',  prefixes: ['choker', 'Choker', ''], from: 1, to: 77 }
-      ],
-      broshs: [
-        { folder: 'broshs', prefixes: ['brosh', 'Brosh', ''], from: 1, to: 4 }
+        { folder: 'chokers', from: 1, to: 77 }
       ],
       breloks: [
-        { folder: 'breloks',  prefixes: ['brelok', 'Brelok', ''], from: 1, to: 20 }
+        { folder: 'breloks', from: 1, to: 20 }
       ],
       chotkis: [
-        { folder: 'chotkis', prefixes: ['chotka', 'chotki', 'Chotka', 'Chotki', ''], from: 1, to: 4 }
+        { folder: 'chotkis', from: 1, to: 4 }
       ],
       sergis: [
-        { folder: 'sergis',  prefixes: ['sergi', 'Sergi', ''], from: 1, to: 26 }
+        { folder: 'sergis', from: 1, to: 26 }
+      ]
+    };
+
+    const CATALOG_VIDEOS = {
+      braslets: [
+        'images/katalogs/braslet.mp4',
+        'images/katalogs/braslet2.mp4',
+        'images/katalogs/braslet3.mp4',
+        'images/katalogs/braslet4.mp4',
+        'images/katalogs/braslet5.mp4',
+        'images/katalogs/braslet6.mp4',
+        'images/katalogs/braslet7.mp4',
+        'images/katalogs/braslet8.mp4',
+        'images/katalogs/braslet9.mp4',
+        'images/katalogs/braslet10.mp4'
+      ],
+      chokers: [
+        'images/katalogs/choker.mp4',
+        'images/katalogs/choker2.mp4'
+      ],
+      nabors: [
+        'images/katalogs/nabor.mp4',
+        'images/katalogs/nabor2.mp4'
+      ],
+      sergis: [
+        'images/katalogs/sergi.mp4'
       ]
     };
 
@@ -646,12 +649,10 @@
 
     const IMG_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG', 'WEBP'];
 
-    function imgCandidates(folder, prefixes, num) {
+    function imgCandidates(folder, num) {
       const list = [];
-      for (const p of prefixes) {
-        for (const e of IMG_EXTS) {
-          list.push(`images/${folder}/${p}${num}.${e}`);
-        }
+      for (const e of IMG_EXTS) {
+        list.push(`images/${folder}/${num}.${e}`);
       }
       return list;
     }
@@ -668,6 +669,12 @@
 
       let i = 0;
       img.addEventListener('load', () => img.classList.add('loaded'));
+      
+      // Если изображение уже в кэше, событие load может не сработать
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+
       img.addEventListener('error', () => {
         i++;
         if (i < candidates.length) {
@@ -682,13 +689,22 @@
       return card;
     }
 
+    function createVideoCard(candidates, delay) {
+      const card = document.createElement('div');
+      card.className = 'card card-video';
+      card.style.animationDelay = delay + 'ms';
+
+      const video = buildVideo(candidates, () => card.remove());
+      card.appendChild(video);
+      return card;
+    }
+
     function renderCategory(key) {
       const blocks = CATALOG[key];
       if (!blocks) return;
 
       grid.innerHTML = '';
 
-      /* Пустой раздел */
       if (blocks.length === 0) {
         const box = document.createElement('div');
         box.className = 'empty-state';
@@ -698,22 +714,49 @@
         return;
       }
 
+      const items = [];
+      blocks.forEach(block => {
+        for (let n = block.from; n <= block.to; n++) {
+          items.push({
+            type: 'img',
+            candidates: imgCandidates(block.folder, n)
+          });
+        }
+      });
+
+      const videoList = CATALOG_VIDEOS[key] || [];
+      
+      if (videoList.length > 0 && items.length > 4) {
+        videoList.forEach((vCandidates, index) => {
+          const fraction = (index + 1) / (videoList.length + 1);
+          const pos = Math.floor(items.length * fraction);
+          
+          if (pos > 0 && pos < items.length - 1) {
+            items.splice(pos, 0, {
+              type: 'video',
+              candidates: [vCandidates]
+            });
+          }
+        });
+      }
+
       const fragment = document.createDocumentFragment();
       let shown = 0;
 
-      blocks.forEach(block => {
-        for (let n = block.from; n <= block.to; n++) {
-          const card = createImageCard(
-            imgCandidates(block.folder, block.prefixes, n),
-            Math.min(shown * 14, 420)
-          );
-          fragment.appendChild(card);
-          shown++;
+      items.forEach((item) => {
+        const delay = Math.min(shown * 14, 420);
+        if (item.type === 'video') {
+          fragment.appendChild(createVideoCard(item.candidates, delay));
+        } else {
+          fragment.appendChild(createImageCard(item.candidates, delay));
         }
+        shown++;
       });
 
       grid.appendChild(fragment);
       countLabel.textContent = shown + ' шт.';
+      
+      revealInit();
     }
 
     filters.addEventListener('click', (e) => {
@@ -725,7 +768,36 @@
       renderCategory(btn.dataset.cat);
     });
 
+    /* ============================================================
+       АНИМАЦИИ ПРИ ПРОКРУТКЕ
+       ============================================================ */
+    let revealObserver = null;
+
+    function revealInit() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+
+      if (!revealObserver) {
+        revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      }
+
+      document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+        revealObserver.observe(el);
+      });
+    }
+
+    /* Стартовый рендер */
     renderCategory('nabors');
+    revealInit();
   </script>
 </body>
 </html>
