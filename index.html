@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Огонь и Вода — украшения из вулканической лавы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0a0c;
+    --bg-soft:#121216;
+    --card:#17171c;
+    --fg:#f2f2f5;
+    --fg-dim:#82828e;
+    --line:rgba(255,255,255,.1);
+    --accent-1:#5b5bff;
+    --accent-2:#a855f7;
+  }
+  :root[data-theme="light"]{
+    --bg:#efeeea;
+    --bg-soft:#ffffff;
+    --card:#e2e1dc;
+    --fg:#0d0d10;
+    --fg-dim:#6f6f78;
+    --line:rgba(0,0,0,.1);
+    --accent-1:#5b5bff;
+    --accent-2:#a855f7;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    font-weight:400;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    padding-bottom:46px;
+    transition:background-color .5s var(--ease), color .5s var(--ease);
+  }
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .8s var(--ease), transform .8s var(--ease);
+    will-change:opacity, transform;
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .reveal-delay-1{transition-delay:.08s;}
+  .reveal-delay-2{transition-delay:.16s;}
+  .reveal-delay-3{transition-delay:.24s;}
+  .reveal-delay-4{transition-delay:.32s;}
+  .reveal-delay-5{transition-delay:.40s;}
+  .reveal-delay-6{transition-delay:.48s;}
+
+  /* ---------- HERO С ЛОГОТИПОМ ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:grid;
+    place-items:center;
+    padding:0 4vw;
+    overflow:hidden;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    text-align:center;
+  }
+  .hero-inner h1{
+    font-family:'Unbounded',sans-serif;
+    font-weight:800;
+    font-size:clamp(1.45rem, 6.4vw, 6rem);
+    line-height:1;
+    letter-spacing:-.035em;
+    color:var(--fg);
+    white-space:nowrap;
+    position:relative;
+    z-index:2;
+  }
+
+  /* Логотип на фоне (за текстом) */
+  .hero-logo{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:clamp(280px, 65vw, 700px); /* Сделал больше */
+    height:auto;
+    z-index:1;
+    pointer-events:none;
+    opacity:0.55; /* Сделал ярче */
+    animation: breathe 5s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: translate(-50%, -50%) translateY(0);
+      opacity: 0.45;
+    }
+    50% {
+      transform: translate(-50%, -50%) translateY(-20px);
+      opacity: 0.65;
+    }
+  }
+
+  /* ---------- INTRO ---------- */
+  .intro{
+    max-width:700px;
+    margin:0 auto;
+    padding:10vh 5vw 12vh;
+    text-align:center;
+  }
+  .intro-lead{
+    font-size:clamp(.98rem,1.6vw,1.12rem);
+    line-height:1.72;
+    color:var(--fg);
+    opacity:.88;
+    margin-bottom:2.9rem;
+  }
+
+  .price-list{
+    list-style:none;
+    max-width:430px;
+    margin:0 auto;
+  }
+  .price-list li{
+    display:flex;
+    align-items:center;
+    gap:.8rem;
+    padding:.85rem 0;
+    font-size:1rem;
+    border-bottom:1px solid var(--line);
+  }
+  .price-list li:last-child{border-bottom:none;}
+  .price-list .name{color:var(--fg);}
+  .price-list .rule{
+    flex:1;
+    height:1px;
+    background-image:linear-gradient(90deg, var(--line) 0 3px, transparent 3px 8px);
+    background-size:8px 1px;
+    opacity:.9;
+  }
+  .price-list .val{
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+
+  /* ---------- КНОПКИ ---------- */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 3rem;
+  }
+
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.6rem;
+    padding:1rem 2.8rem;
+    border-radius:999px;
+    background:linear-gradient(100deg, var(--accent-1), var(--accent-2));
+    color:#fff;
+    font-family:'Manrope',sans-serif;
+    font-weight:600;
+    font-size:1rem;
+    text-decoration:none;
+    letter-spacing:.01em;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    box-shadow:0 10px 34px -10px rgba(120,80,255,.85);
+    min-width: 260px;
+  }
+  .cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 44px -10px rgba(120,80,255,1);
+  }
+  .cta:active{transform:translateY(0);}
+
+  /* Кнопка WhatsApp */
+  .cta-wa {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    box-shadow: 0 10px 34px -10px rgba(37, 211, 102, 0.85);
+  }
+  .cta-wa:hover {
+    box-shadow: 0 16px 44px -10px rgba(37, 211, 102, 1);
+  }
+
+  .cta-note{
+    display:block;
+    margin-top:.5rem;
+    font-size:.72rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+  }
+
+  /* ---------- BANNERS (видео 9:16) ---------- */
+  .banners{
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 4vw 12vh;
+  }
+  .banners-track{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:16px;
+    max-width:960px;
+    margin:0 auto;
+  }
+  .banner{
+    position:relative;
+    aspect-ratio:9/16;
+    border-radius:20px;
+    overflow:hidden;
+    background:var(--card);
+  }
+  .banner video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  /* ---------- CATALOG ---------- */
+  .catalog{
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 4vw 16vh;
+  }
+  .catalog-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:1rem;
+    margin-bottom:2.5rem;
+    padding-bottom:1.2rem;
+    border-bottom:1px solid var(--line);
+  }
+  .catalog-head h2{
+    font-family:'Unbounded',sans-serif;
+    font-weight:700;
+    font-size:clamp(1.3rem,3vw,2rem);
+    letter-spacing:-.02em;
+  }
+  .catalog-count{
+    font-size:.8rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+    white-space:nowrap;
+  }
+
+  .catalog-layout{
+    display:grid;
+    grid-template-columns:210px 1fr;
+    gap:3rem;
+    align-items:start;
+  }
+
+  .filters{
+    position:sticky;
+    top:2rem;
+    display:flex;
+    flex-direction:column;
+    gap:.25rem;
+  }
+  .filters button{
+    all:unset;
+    cursor:pointer;
+    padding:.72rem 1.1rem;
+    border-radius:12px;
+    font-family:'Manrope',sans-serif;
+    font-size:.95rem;
+    color:var(--fg-dim);
+    transition:background-color .25s var(--ease), color .25s var(--ease);
+    white-space:nowrap;
+  }
+  .filters button:hover{color:var(--fg);}
+  .filters button.active{
+    color:var(--fg);
+    background:var(--card);
+    font-weight:600;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(172px, 1fr));
+    gap:14px;
+    grid-auto-rows: 1fr;
+  }
+
+  .card{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    background:var(--card);
+    animation:fadeUp .5s var(--ease) both;
+    aspect-ratio: 1/1;
+  }
+  
+  .card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:opacity .55s var(--ease), transform .7s var(--ease);
+  }
+  
+  .card:hover img{
+    transform:scale(1.06);
+  }
+
+  /* Стандартное видео в каталоге: высотой в 2 фото */
+  .card-video{
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+  .card-video video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  /* Специальное видео (баннер) в каталоге: высотой в 1 фото */
+  .card-video-1x1 {
+    grid-row: span 1;
+    aspect-ratio: 1/1;
+  }
+  .card-video-1x1 video {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .empty-state{
+    grid-column:1/-1;
+    padding:3.2rem 1.6rem;
+    text-align:center;
+    border:1px dashed var(--line);
+    border-radius:18px;
+    color:var(--fg-dim);
+    font-size:.98rem;
+    line-height:1.7;
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* ---------- THEME TOGGLE ---------- */
+  .theme-btn{
+    position:fixed;
+    top:1.4rem;
+    right:1.4rem;
+    z-index:60;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg-soft);
+    color:var(--fg);
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    transition:transform .35s var(--ease), background-color .4s var(--ease);
+  }
+  .theme-btn:hover{transform:rotate(25deg);}
+  :root[data-theme="dark"] .icon-sun{display:none;}
+  :root[data-theme="light"] .icon-moon{display:none;}
+
+  /* ---------- DEMO BANNER ---------- */
+  .demo-banner{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:70;
+    padding:.7rem 1rem;
+    text-align:center;
+    font-size:.72rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--fg-dim);
+    background:color-mix(in srgb, var(--bg-soft) 82%, transparent);
+    border-top:1px solid var(--line);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:820px){
+    .catalog-layout{
+      grid-template-columns:1fr;
+      gap:1.6rem;
+    }
+    .filters{
+      position:static;
+      flex-direction:row;
+      overflow-x:auto;
+      gap:.4rem;
+      padding-bottom:.5rem;
+      scrollbar-width:none;
+    }
+    .filters::-webkit-scrollbar{display:none;}
+    .filters button{
+      padding:.6rem .95rem;
+      border:1px solid var(--line);
+      font-size:.88rem;
+    }
+    .grid{
+      grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+      gap:10px;
+    }
+    .card{border-radius:14px;}
+
+    .banners{
+      padding-left:0;
+      padding-right:0;
+      padding-bottom:9vh;
+    }
+    .banners-track{
+      display:flex;
+      gap:12px;
+      max-width:none;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      padding:0 4vw;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    .banners-track::-webkit-scrollbar{display:none;}
+    .banner{
+      flex:0 0 80%;
+      scroll-snap-align:center;
+      border-radius:16px;
+    }
+  }
+
+  @media (max-width:480px){
+    .grid{grid-template-columns:repeat(2, 1fr);}
+    .theme-btn{top:1rem;right:1rem;width:42px;height:42px;}
+    .catalog-head{flex-direction:column;gap:.4rem;}
+    .banner{flex:0 0 84%;}
+    .hero-logo{width:clamp(220px, 80vw, 400px);}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+    .reveal{opacity:1 !important;transform:none !important;}
+    .hero-logo{animation:none; opacity:0.55;}
+  }
+</style>
+</head>
+<body>
+
+  <button class="theme-btn" id="themeToggle" aria-label="Сменить тему">
+    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </svg>
+  </button>
+
+  <header class="hero">
+    <!-- Логотип на фоне -->
+    <img src="images/logo_1.png" class="hero-logo" alt="">
+    
+    <div class="hero-inner">
+      <h1 class="reveal">Огонь и Вода</h1>
+    </div>
+  </header>
+
+  <section class="intro">
+    <p class="intro-lead reveal">
+      Эксклюзивная коллекция украшений, вдохновлённая природной красотой Камчатки.
+      Каждое изделие создано из настоящей вулканической лавы — материала с уникальной
+      энергетикой и неповторимым характером.
+    </p>
+
+    <ul class="price-list">
+      <li class="reveal reveal-delay-1">
+        <span class="name">Серьги</span><span class="rule"></span><span class="val">900 ₽</span>
+      </li>
+      <li class="reveal reveal-delay-2">
+        <span class="name">Брелоки</span><span class="rule"></span><span class="val">1000 ₽</span>
+      </li>
+      <li class="reveal reveal-delay-3">
+        <span class="name">Браслеты</span><span class="rule"></span><span class="val">1500 ₽</span>
+      </li>
+      <li class="reveal reveal-delay-4">
+        <span class="name">Чокеры</span><span class="rule"></span><span class="val">2000 ₽</span>
+      </li>
+      <li class="reveal reveal-delay-5">
+        <span class="name">Броши</span><span class="rule"></span><span class="val">2000 ₽</span>
+      </li>
+      <li class="reveal reveal-delay-6">
+        <span class="name">Чётки</span><span class="rule"></span><span class="val">2000 ₽</span>
+      </li>
+    </ul>
+
+    <div class="btn-group reveal reveal-delay-3">
+      <a class="cta" href="https://max.ru/" target="_blank" rel="noopener">Написать в МАХ</a>
+      <a class="cta cta-wa" href="https://wa.me/" target="_blank" rel="noopener">Написать в WhatsApp</a>
+      <small class="cta-note reveal reveal-delay-4">для заказа</small>
+    </div>
+  </section>
+
+  <section class="banners reveal" aria-label="Видео">
+    <div class="banners-track" id="bannersTrack"></div>
+  </section>
+
+  <section class="catalog">
+    <div class="catalog-head reveal">
+      <h2>Каталог</h2>
+      <span class="catalog-count" id="catalogCount"></span>
+    </div>
+
+    <div class="catalog-layout">
+      <aside class="filters reveal" id="filters">
+        <button data-cat="nabors" class="active">Наборы</button>
+        <button data-cat="braslets">Браслеты</button>
+        <button data-cat="chokers">Чокеры</button>
+        <button data-cat="breloks">Брелоки</button>
+        <button data-cat="chotkis">Чётки</button>
+        <button data-cat="sergis">Серьги</button>
+      </aside>
+
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <div class="demo-banner">демо-сайт, не для продажи</div>
+
+  <script>
+    /* ============================================================
+       СТАРТОВАЯ ТЕМА
+       ============================================================ */
+    const root = document.documentElement;
+    root.setAttribute('data-theme', 'dark');
+    localStorage.removeItem('theme');
+
+    /* ============================================================
+       ТЕМА
+       ============================================================ */
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    /* ============================================================
+       ВИДЕО-ХЕЛПЕР
+       ============================================================ */
+    function buildVideo(candidates, onFail) {
+      const v = document.createElement('video');
+      v.muted = true;
+      v.loop = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.preload = 'metadata';
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('disablepictureinpicture', '');
+
+      let i = 0;
+      v.addEventListener('error', () => {
+        i++;
+        if (i < candidates.length) {
+          v.src = candidates[i];
+        } else if (onFail) {
+          onFail();
+        }
+      });
+
+      v.addEventListener('loadeddata', () => {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      });
+
+      v.src = candidates[0];
+      return v;
+    }
+
+    /* ============================================================
+       БАННЕРЫ (ВЕРХНИЕ 3 ВИДЕО)
+       ============================================================ */
+    const BANNER_FILES = [
+      ['images/banners/banner1.mp4', 'images/banners/1.mp4'],
+      ['images/banners/banner2.mp4', 'images/banners/2.mp4'],
+      ['images/banners/banner3.mov', 'images/banners/3.mov']
+    ];
+
+    const bannersTrack = document.getElementById('bannersTrack');
+    BANNER_FILES.forEach((candidates) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'banner';
+      const video = buildVideo(candidates, () => wrap.remove());
+      wrap.appendChild(video);
+      bannersTrack.appendChild(wrap);
+    });
+
+    /* ============================================================
+       КАТАЛОГ
+       ============================================================ */
+    const CATALOG = {
+      nabors: [
+        { folder: 'nabors', from: 1, to: 77 }
+      ],
+      braslets: [
+        { folder: 'braslets',  from: 1,  to: 83 },
+        { folder: 'braslets2', from: 84, to: 128 },
+        { folder: 'braslets3', from: 129, to: 220 }
+      ],
+      chokers: [
+        { folder: 'chokers', from: 1, to: 28 }
+      ],
+      breloks: [
+        { folder: 'breloks', from: 1, to: 3 }
+      ],
+      chotkis: [
+        { folder: 'chotkis', from: 1, to: 3 }
+      ],
+      sergis: [
+        { folder: 'sergis', from: 1, to: 22 }
+      ]
+    };
+
+    // Видео из папки katalogs
+    const CATALOG_VIDEOS = {
+      braslets: [
+        'images/katalogs/braslet.mp4',
+        'images/katalogs/braslet1.mp4',
+        'images/katalogs/braslet2.mp4',
+        'images/katalogs/braslet3.mp4',
+        'images/katalogs/braslet4.mp4',
+        'images/katalogs/braslet5.mp4',
+        'images/katalogs/braslet6.mp4',
+        'images/katalogs/braslet7.mp4',
+        'images/katalogs/braslet8.mp4',
+        'images/katalogs/braslet9.mp4',
+        'images/katalogs/braslet10.mp4',
+        'images/katalogs/braslet11.mp4',
+        'images/katalogs/braslet12.mp4',
+        'images/katalogs/braslet13.mp4',
+        'images/katalogs/braslet14.mp4',
+      ],
+      nabors: [
+        'images/katalogs/nabor.mp4'
+      ]
+    };
+
+    // Специальное видео-баннер для раздела "Наборы" (занимает 1 место)
+    const NABORS_BANNER = 'images/katalogs/banner.mp4';
+
+    const grid = document.getElementById('grid');
+    const countLabel = document.getElementById('catalogCount');
+    const filters = document.getElementById('filters');
+
+    const IMG_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG', 'WEBP'];
+
+    function imgCandidates(folder, num) {
+      const list = [];
+      for (const e of IMG_EXTS) {
+        list.push(`images/${folder}/${num}.${e}`);
+      }
+      return list;
+    }
+
+    function createImageCard(candidates, delay) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.animationDelay = delay + 'ms';
+
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.alt = '';
+
+      let i = 0;
+      img.addEventListener('load', () => img.classList.add('loaded'));
+      
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+
+      img.addEventListener('error', () => {
+        i++;
+        if (i < candidates.length) {
+          img.src = candidates[i];
+        } else {
+          card.remove();
+        }
+      });
+
+      img.src = candidates[0];
+      card.appendChild(img);
+      return card;
+    }
+
+    function createVideoCard(candidates, delay, isSmall = false) {
+      const card = document.createElement('div');
+      card.className = isSmall ? 'card card-video-1x1' : 'card card-video';
+      card.style.animationDelay = delay + 'ms';
+
+      const video = buildVideo(candidates, () => card.remove());
+      card.appendChild(video);
+      return card;
+    }
+
+    function renderCategory(key) {
+      const blocks = CATALOG[key];
+      if (!blocks) return;
+
+      grid.innerHTML = '';
+
+      if (blocks.length === 0) {
+        const box = document.createElement('div');
+        box.className = 'empty-state';
+        box.textContent = 'В этом разделе пока нет фотографий.';
+        grid.appendChild(box);
+        countLabel.textContent = '0 шт.';
+        return;
+      }
+
+      const items = [];
+      
+      // Вставляем специальный баннер для наборов первым
+      if (key === 'nabors' && NABORS_BANNER) {
+        items.push({
+          type: 'video-small',
+          candidates: [NABORS_BANNER]
+        });
+      }
+
+      blocks.forEach(block => {
+        for (let n = block.from; n <= block.to; n++) {
+          items.push({
+            type: 'img',
+            candidates: imgCandidates(block.folder, n)
+          });
+        }
+      });
+
+      const videoList = CATALOG_VIDEOS[key] || [];
+      
+      if (videoList.length > 0 && items.length > 4) {
+        videoList.forEach((vCandidates, index) => {
+          const fraction = (index + 1) / (videoList.length + 1);
+          const pos = Math.floor(items.length * fraction);
+          
+          if (pos > 0 && pos < items.length - 1) {
+            items.splice(pos, 0, {
+              type: 'video',
+              candidates: [vCandidates]
+            });
+          }
+        });
+      }
+
+      const fragment = document.createDocumentFragment();
+      let shown = 0;
+
+      items.forEach((item) => {
+        const delay = Math.min(shown * 14, 420);
+        if (item.type === 'video') {
+          fragment.appendChild(createVideoCard(item.candidates, delay, false));
+        } else if (item.type === 'video-small') {
+          fragment.appendChild(createVideoCard(item.candidates, delay, true));
+        } else {
+          fragment.appendChild(createImageCard(item.candidates, delay));
+        }
+        shown++;
+      });
+
+      grid.appendChild(fragment);
+      countLabel.textContent = shown + ' шт.';
+      
+      revealInit();
+    }
+
+    filters.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+
+      filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCategory(btn.dataset.cat);
+    });
+
+    /* ============================================================
+       АНИМАЦИИ ПРИ ПРОКРУТКЕ
+       ============================================================ */
+    let revealObserver = null;
+
+    function revealInit() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+
+      if (!revealObserver) {
+        revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      }
+
+      document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+        revealObserver.observe(el);
+      });
+    }
+
+    /* Стартовый рендер */
+    renderCategory('nabors');
+    revealInit();
+  </script>
+</body>
+</html>
